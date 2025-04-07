@@ -1,8 +1,7 @@
 package com.flight.data.dto;
 
 import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
-
+import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data

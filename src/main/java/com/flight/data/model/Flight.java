@@ -3,8 +3,7 @@ package com.flight.data.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
-
+import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
@@ -25,18 +24,18 @@ public class Flight {
     private Double fare;
 
     @NotNull
-    @Column(name = "departure_airport", length = 3, nullable = false)
+    @Column(name = "departure_airport", length = 3)
     private String departureAirport;
 
     @NotNull
-    @Column(name = "destination_airport", length = 3, nullable = false)
+    @Column(name = "destination_airport", length = 3)
     private String destinationAirport;
 
     @NotNull
-    @Column(name = "departure_time", nullable = false)
+    @Column(name = "departure_time")
     private Instant departureTime;
 
     @NotNull
-    @Column(name = "arrival_time", nullable = false)
+    @Column(name = "arrival_time")
     private Instant arrivalTime;
 }
