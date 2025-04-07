@@ -1,4 +1,4 @@
-package com.flight.data.exception;
+package com.flight.data.mgmt.exception;
 
 import lombok.Getter;
 

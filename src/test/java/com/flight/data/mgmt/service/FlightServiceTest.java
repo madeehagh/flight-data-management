@@ -1,11 +1,12 @@
-package com.flight.data.service;
+package com.flight.data.mgmt.service;
 
-import com.flight.data.exception.FlightValidationException;
+import com.flight.data.mgmt.exception.FlightValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,10 +59,10 @@ public class FlightServiceTest {
         String departureAirport = "JFK";
         String destinationAirport = "LAX";
         Instant now = Instant.now();
-        Instant departureTimeStart = now.plusSeconds(172800);   // plus 2 days
-        Instant departureTimeEnd = now.plusSeconds(259200);     // plus 3 days
-        Instant arrivalTimeStart = now.plusSeconds(86400);      // plus 1 day
-        Instant arrivalTimeEnd = now.plusSeconds(345600);       // plus 4 days
+        Instant departureTimeStart = now.plus(2, ChronoUnit.DAYS);
+        Instant departureTimeEnd = now.plus(3, ChronoUnit.DAYS);
+        Instant arrivalTimeStart = now.plus(1, ChronoUnit.DAYS);
+        Instant arrivalTimeEnd = now.plus(4, ChronoUnit.DAYS);
 
         FlightValidationException exception = assertThrows(
                 FlightValidationException.class,

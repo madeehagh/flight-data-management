@@ -1,6 +1,6 @@
-package com.flight.data.exception;
+package com.flight.data.mgmt.exception;
 
-import com.flight.data.dto.ErrorResponseDTO;
+import com.flight.data.mgmt.dto.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

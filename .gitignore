@@ -3,3 +3,5 @@ target
 .gitattributes
 .vscode
 mvnw.cmd
+.idea
+flight-data-mgmt.iml

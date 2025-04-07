@@ -1,6 +1,6 @@
-package com.flight.data.repository;
+package com.flight.data.mgmt.repository;
 
-import com.flight.data.model.Flight;
+import com.flight.data.mgmt.model.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

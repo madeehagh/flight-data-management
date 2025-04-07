@@ -1,14 +1,21 @@
-package com.flight.data.model;
+package com.flight.data.mgmt.model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
+
 import java.time.Instant;
 
 @Entity
 @Table(name = "flights")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

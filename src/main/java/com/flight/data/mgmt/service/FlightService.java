@@ -1,9 +1,9 @@
-package com.flight.data.service;
+package com.flight.data.mgmt.service;
 
 
-import com.flight.data.exception.FlightValidationException;
-import com.flight.data.model.Flight;
-import com.flight.data.repository.FlightRepository;
+import com.flight.data.mgmt.exception.FlightValidationException;
+import com.flight.data.mgmt.model.Flight;
+import com.flight.data.mgmt.repository.FlightRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

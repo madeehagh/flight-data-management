@@ -1,4 +1,4 @@
-package com.flight.data.dto;
+package com.flight.data.mgmt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
