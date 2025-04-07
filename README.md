@@ -72,20 +72,21 @@ This system helps you:
 
 The application will start on `http://localhost:8080`
 
-## API Endpoints 📡
+### Consideration
+Users typically search for flights with at least origin and destination
+Dates are important for flight searches
+Airline might be optional for comparison shopping
 
-### Search Flights
-```
-GET /api/flights/search
-```
-Query parameters:
-- `departureAirport`: 3-letter airport code
-- `destinationAirport`: 3-letter airport code
-- `airline`: Airline name (optional)
-- `departureTimeStart`: ISO date-time (UTC)
-- `departureTimeEnd`: ISO date-time (UTC)
-- `arrivalTimeStart`: ISO date-time (UTC)
-- `arrivalTimeEnd`: ISO date-time (UTC)
+**Make these parameters required:**
+1. Origin (departure airport)
+2. Destination (arrival airport)
+3. Departure time range (from-to)
+
+**Make these parameters optional:**
+1. Airline
+2. Arrival time range
+
+## API Endpoints 
 
 ### Manage Flights
 ```
@@ -95,7 +96,35 @@ DELETE /api/flights/{id}     # Delete a flight
 GET    /api/flights/{id}     # Get flight details
 ```
 
-## How It Works 🔄
+### Search Flights
+```
+GET /api/flights/search
+```
+
+##### Consideration
+Users typically search for flights with at least origin and destination
+Dates are important for flight searches
+Airline might be optional for comparison shopping
+
+**Make these parameters required:**
+1. Origin (departure airport)
+2. Destination (arrival airport)
+3. Departure time range (from-to)
+
+**Make these parameters optional:**
+1. Airline
+2. Arrival time range
+
+Query parameters:
+- `departureAirport`: 3-letter airport code
+- `destinationAirport`: 3-letter airport code
+- `airline`: Airline name (optional)
+- `departureTimeStart`: ISO date-time (UTC)
+- `departureTimeEnd`: ISO date-time (UTC)
+- `arrivalTimeStart`: ISO date-time (UTC)
+- `arrivalTimeEnd`: ISO date-time (UTC)
+
+## How It Works 
 
 1. When you search for flights:
    - The system checks our local database
@@ -108,19 +137,12 @@ GET    /api/flights/{id}     # Get flight details
    - CrazySupplier data is fetched in real-time
    - No CrazySupplier data is stored
 
-## Configuration ⚙️
+
+## Configuration 
 
 The application uses these main configuration files:
 - `application.properties`: Main configuration
 - `pom.xml`: Dependencies and build settings
-
-## Contributing 🤝
-
-We welcome contributions! Here's how you can help:
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
 
 ## Testing 🧪
 
@@ -128,24 +150,3 @@ Run tests with:
 ```bash
 mvn test
 ```
-
-## License 📄
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support 💬
-
-If you have questions or need help:
-- Open an issue
-- Contact the development team
-- Check the documentation
-
-## Acknowledgments 🙏
-
-- Spring Boot team
-- CrazySupplier API team
-- All contributors
-
----
-
-Made with ❤️ by the Flight Data Management Team 
