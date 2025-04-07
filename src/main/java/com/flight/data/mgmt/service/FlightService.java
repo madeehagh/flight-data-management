@@ -14,6 +14,7 @@ import java.util.List;
 @Service
 public class FlightService {
     private FlightRepository flightRepository;
+
     public List<Flight> searchFlights(
             String departureAirport,
             String destinationAirport,
@@ -21,28 +22,28 @@ public class FlightService {
             Instant departureTimeStart,
             Instant departureTimeEnd,
             Instant arrivalTimeStart,
-            Instant arrivalTimeEnd ) {
+            Instant arrivalTimeEnd) {
 
-                validateSearchParam(departureAirport, destinationAirport, departureTimeStart, departureTimeEnd, arrivalTimeStart, arrivalTimeEnd);
+        validateSearchParam(departureAirport, destinationAirport, departureTimeStart, departureTimeEnd, arrivalTimeStart, arrivalTimeEnd);
 
-                List<Flight> localFlights = flightRepository.searchFlights(
-                        departureAirport,
-                        destinationAirport,
-                        airline,
-                        departureTimeStart,
-                        departureTimeEnd,
-                        arrivalTimeStart,
-                        arrivalTimeEnd
-                );
+        List<Flight> localFlights = flightRepository.searchFlights(
+                departureAirport,
+                destinationAirport,
+                airline,
+                departureTimeStart,
+                departureTimeEnd,
+                arrivalTimeStart,
+                arrivalTimeEnd
+        );
 
-                List<Flight> crazySupplierFlights = new ArrayList<>();
+        List<Flight> crazySupplierFlights = new ArrayList<>();
 
-                List<Flight> allFlights = new ArrayList<>(localFlights);
-                allFlights.addAll(crazySupplierFlights);
+        List<Flight> allFlights = new ArrayList<>(localFlights);
+        allFlights.addAll(crazySupplierFlights);
 
-                allFlights.sort(Comparator.comparing(Flight::getDepartureTime));
+        allFlights.sort(Comparator.comparing(Flight::getDepartureTime));
 
-            return allFlights;
+        return allFlights;
     }
 
     void validateSearchParam(String departureAirport,
@@ -93,10 +94,10 @@ public class FlightService {
     }
 
     private boolean isInvalidAirportCode(String destinationAirport) {
-            if (destinationAirport == null || destinationAirport.length() != 3) {
-                return true;
-            }
-            return !destinationAirport.matches("[A-Za-z]{3}");
+        if (destinationAirport == null || destinationAirport.length() != 3) {
+            return true;
+        }
+        return !destinationAirport.matches("[A-Za-z]{3}");
     }
 }
 

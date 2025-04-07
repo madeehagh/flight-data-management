@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.3</version>
-        <relativePath/> 
+        <relativePath/>
     </parent>
     <groupId>com.flight.data</groupId>
     <artifactId>flight-data-mgmt</artifactId>
@@ -112,7 +112,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
-                    <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.14.12/byte-buddy-agent-1.14.12.jar</argLine>
+                    <argLine>
+                        -javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.14.12/byte-buddy-agent-1.14.12.jar
+                    </argLine>
                     <useModulePath>false</useModulePath>
                     <includes>
                         <include>**/*Test.java</include>

@@ -1,11 +1,12 @@
 # Flight Data Management System 🛫
 
-This is a Spring Boot application that helps manage and search flight data from multiple sources. 
+This is a Spring Boot application that helps manage and search flight data from multiple sources.
 Let me walk you through what this project is all about.
 
-## What Does It Do? 
+## What Does It Do?
 
 This system helps you:
+
 - Search for flights across multiple sources
 - Manage your own flight data
 - Get real-time flight information from CrazySupplier (external API call)
@@ -15,22 +16,22 @@ This system helps you:
 ## Key Features ✨
 
 - **Smart Search**: Search flights by:
-  - Departure airport
-  - Destination airport
-  - Airline
-  - Departure time
-  - Arrival time
+    - Departure airport
+    - Destination airport
+    - Airline
+    - Departure time
+    - Arrival time
 
 - **Multiple Data Sources**:
-  - Local flight database
-  - Real-time CrazySupplier API integration
+    - Local flight database
+    - Real-time CrazySupplier API integration
 
 - **RESTful API Endpoints**:
-  - Create flights
-  - Update flight information
-  - Delete flights
-  - Search flights
-  - Get flight details
+    - Create flights
+    - Update flight information
+    - Delete flights
+    - Search flights
+    - Get flight details
 
 ## Tech Stack 🛠️
 
@@ -73,22 +74,26 @@ This system helps you:
 The application will start on `http://localhost:8080`
 
 ### Consideration
+
 Users typically search for flights with at least origin and destination
 Dates are important for flight searches
 Airline might be optional for comparison shopping
 
 **Make these parameters required:**
+
 1. Origin (departure airport)
 2. Destination (arrival airport)
 3. Departure time range (from-to)
 
 **Make these parameters optional:**
+
 1. Airline
 2. Arrival time range
 
-## API Endpoints 
+## API Endpoints
 
 ### Manage Flights
+
 ```
 POST   /api/flights          # Create a new flight
 PUT    /api/flights/{id}     # Update a flight
@@ -97,25 +102,30 @@ GET    /api/flights/{id}     # Get flight details
 ```
 
 ### Search Flights
+
 ```
 GET /api/flights/search
 ```
 
 ##### Consideration
+
 Users typically search for flights with at least origin and destination
 Dates are important for flight searches
 Airline might be optional for comparison shopping
 
 **Make these parameters required:**
+
 1. Origin (departure airport)
 2. Destination (arrival airport)
 3. Departure time range (from-to)
 
 **Make these parameters optional:**
+
 1. Airline
 2. Arrival time range
 
 Query parameters:
+
 - `departureAirport`: 3-letter airport code
 - `destinationAirport`: 3-letter airport code
 - `airline`: Airline name (optional)
@@ -124,29 +134,30 @@ Query parameters:
 - `arrivalTimeStart`: ISO date-time (UTC)
 - `arrivalTimeEnd`: ISO date-time (UTC)
 
-## How It Works 
+## How It Works
 
 1. When you search for flights:
-   - The system checks our local database
-   - Simultaneously queries CrazySupplier API
-   - Combines results from both sources
-   - Returns sorted flight list
+    - The system checks our local database
+    - Simultaneously queries CrazySupplier API
+    - Combines results from both sources
+    - Returns sorted flight list
 
 2. For flight management:
-   - Local flights are stored in H2 database
-   - CrazySupplier data is fetched in real-time
-   - No CrazySupplier data is stored
+    - Local flights are stored in H2 database
+    - CrazySupplier data is fetched in real-time
+    - No CrazySupplier data is stored
 
-
-## Configuration 
+## Configuration
 
 The application uses these main configuration files:
+
 - `application.properties`: Main configuration
 - `pom.xml`: Dependencies and build settings
 
 ## Testing 🧪
 
 Run tests with:
+
 ```bash
 mvn test
 ```

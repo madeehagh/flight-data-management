@@ -3,8 +3,8 @@ package com.flight.data.mgmt.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.flight.data.mgmt.dto.CrazySupplierFlightRequestDTO;
 import com.flight.data.mgmt.dto.CrazySupplierFlightResponseDTO;
 import com.flight.data.mgmt.dto.FlightSearchCriteria;
@@ -33,7 +33,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,16 +69,16 @@ class CrazySupplierServiceTest {
         @Test
         @DisplayName("Should successfully fetch and map flights when API returns 200")
         void success() throws Exception {
-            
+
             CrazySupplierFlightRequestDTO request = buildCrazySupplierFlightRequestDTO();
             CrazySupplierFlightResponseDTO responseDTO = buildCrazySupplierFlightResponseDTO();
             Flight expectedFlight = buildExpectedFlight();
-            
-            
+
+
             mockSuccessfulApiCall(request, responseDTO, expectedFlight);
             List<Flight> result = crazySupplierService.fetchFlightsFromApi(request);
-            
-            
+
+
             assertNotNull(result);
             assertFalse(result.isEmpty());
             assertEquals(1, result.size());
@@ -94,16 +93,16 @@ class CrazySupplierServiceTest {
         @Test
         @DisplayName("Should throw exception when API returns non-200 status")
         void non200Status_ThrowsException() throws Exception {
-            
+
             CrazySupplierFlightRequestDTO request = buildCrazySupplierFlightRequestDTO();
-            
+
             mockErrorApiCall(request);
-            
+
             RuntimeException exception = assertThrows(
                     RuntimeException.class,
                     () -> crazySupplierService.fetchFlightsFromApi(request)
             );
-            
+
             assertTrue(exception.getMessage().contains("API call failed with status: 500"));
 
             verify(objectMapper).writeValueAsString(request);
@@ -115,11 +114,11 @@ class CrazySupplierServiceTest {
         @Test
         @DisplayName("Should handle empty response from API")
         void emptyResponse_ReturnsEmptyList() throws Exception {
-            
+
             CrazySupplierFlightRequestDTO request = buildCrazySupplierFlightRequestDTO();
             mockEmptyApiCall(request);
             List<Flight> result = crazySupplierService.fetchFlightsFromApi(request);
-            
+
             assertNotNull(result);
             assertTrue(result.isEmpty());
 
@@ -129,15 +128,15 @@ class CrazySupplierServiceTest {
             verify(mapper, never()).toFlight(any());
         }
     }
-    
+
     @Nested
     @DisplayName("searchFlights Tests")
     class SearchFlightsTests {
-        
+
         @Test
         @DisplayName("Should successfully search flights using search criteria")
         void success() throws Exception {
-            
+
             FlightSearchCriteria searchCriteria = buildFlightSearchCriteria();
             CrazySupplierFlightRequestDTO requestDTO = buildCrazySupplierFlightRequestDTO();
             CrazySupplierFlightResponseDTO responseDTO = buildCrazySupplierFlightResponseDTO();
@@ -145,9 +144,9 @@ class CrazySupplierServiceTest {
 
             when(mapper.toCrazySupplierRequestDTO(searchCriteria)).thenReturn(requestDTO);
             mockSuccessfulApiCall(requestDTO, responseDTO, expectedFlight);
-            
+
             List<Flight> result = crazySupplierService.searchFlights(searchCriteria);
-            
+
             assertNotNull(result);
             assertFalse(result.isEmpty());
             assertEquals(1, result.size());
@@ -159,11 +158,11 @@ class CrazySupplierServiceTest {
             verify(objectMapper).getTypeFactory();
             verify(mapper).toFlight(responseDTO);
         }
-        
+
         @Test
         @DisplayName("Should handle IOException during API call")
         void ioException_ThrowsRuntimeException() throws Exception {
-            
+
             FlightSearchCriteria searchCriteria = buildFlightSearchCriteria();
             CrazySupplierFlightRequestDTO requestDTO = buildCrazySupplierFlightRequestDTO();
 
@@ -171,7 +170,7 @@ class CrazySupplierServiceTest {
             mockRequestSerialisation(requestDTO);
             when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                     .thenThrow(new IOException("Network error"));
-            
+
             RuntimeException exception = assertThrows(
                     RuntimeException.class,
                     () -> crazySupplierService.searchFlights(searchCriteria)
@@ -209,7 +208,7 @@ class CrazySupplierServiceTest {
         // Mock the readValue method
         when(objectMapper.readValue(any(String.class), any(JavaType.class)))
                 .thenReturn(Collections.singletonList(responseDTO));
-                
+
         // Mock mapping to Flight
         when(mapper.toFlight(responseDTO)).thenReturn(expectedFlight);
     }
@@ -236,7 +235,7 @@ class CrazySupplierServiceTest {
         when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                 .thenReturn(mockResponse);
     }
-    
+
     private void mockEmptyApiCall(CrazySupplierFlightRequestDTO request) throws IOException, InterruptedException {
         // Mock request serialization
         mockRequestSerialisation(request);

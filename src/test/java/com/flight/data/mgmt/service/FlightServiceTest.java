@@ -20,7 +20,7 @@ public class FlightServiceTest {
 
     @Test
     @DisplayName("Should accept valid search parameters without throwing exception")
-    void validateSearchParam_ValidParameters(){
+    void validateSearchParam_ValidParameters() {
         String departureAirport = "JFK";
         String destinationAirport = "LAX";
         Instant now = Instant.now();
@@ -38,7 +38,7 @@ public class FlightServiceTest {
 
     @Test
     @DisplayName("Should accept valid search parameters when arrival time is not given")
-    void validateSearchParam_WithoutArrivalTime(){
+    void validateSearchParam_WithoutArrivalTime() {
         String departureAirport = "JFK";
         String destinationAirport = "LAX";
         Instant now = Instant.now();

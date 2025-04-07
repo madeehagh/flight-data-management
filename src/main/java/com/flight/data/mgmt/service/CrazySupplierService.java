@@ -1,16 +1,12 @@
 package com.flight.data.mgmt.service;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flight.data.mgmt.dto.CrazySupplierFlightRequestDTO;
 import com.flight.data.mgmt.dto.CrazySupplierFlightResponseDTO;
 import com.flight.data.mgmt.dto.FlightSearchCriteria;
 import com.flight.data.mgmt.mapper.CrazySupplierMapper;
 import com.flight.data.mgmt.model.Flight;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -40,6 +36,7 @@ public class CrazySupplierService {
         this.mapper = mapper;
         this.apiUrl = apiUrl;
     }
+
     public List<Flight> searchFlights(FlightSearchCriteria flightSearchCriteria) {
         CrazySupplierFlightRequestDTO request = mapper.toCrazySupplierRequestDTO(flightSearchCriteria);
         try {
