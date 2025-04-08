@@ -1,7 +1,11 @@
 package com.flight.data.mgmt.service;
 
-import com.flight.data.mgmt.dto.FlightSearchCriteria;
+import com.flight.data.mgmt.dto.FlightResponseDTO;
+import com.flight.data.mgmt.dto.FlightSearchCriteriaDTO;
+import com.flight.data.mgmt.dto.RouteSearchRequestDTO;
 import com.flight.data.mgmt.exception.FlightValidationException;
+import com.flight.data.mgmt.mapper.FlightMapper;
+import com.flight.data.mgmt.model.Flight;
 import com.flight.data.mgmt.repository.FlightRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,19 +16,24 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class FlightServiceTest {
+
+    @InjectMocks
+    private FlightService flightService;
 
     @Mock
     private FlightRepository flightRepository;
 
     @Mock
-    private CrazySupplierService crazySupplierService;
-
-    @InjectMocks
-    private FlightService flightService;
+    private FlightMapper flightMapper;
 
     @BeforeEach
     void setUp() {
@@ -35,20 +44,16 @@ public class FlightServiceTest {
     @DisplayName("Should accept valid search parameters without throwing exception")
     void validateSearchParamValidParameters() {
         String departureAirport = "JFK";
-        String destinationAirport = "LAX";
+        String destinationAirport = "BLR";
         Instant now = Instant.now();
-        Instant departureTimeStart = now.plusSeconds(86400);    // plus 1 day
-        Instant departureTimeEnd = now.plusSeconds(172800);     // plus 2 days
-        Instant arrivalTimeStart = departureTimeStart.plusSeconds(7200);  // plus 2 hours
-        Instant arrivalTimeEnd = departureTimeEnd.plusSeconds(7200);      // plus 2 hours
+        Instant outbound = now.plus(1, ChronoUnit.DAYS);
+        Instant inbound = now.plus(2, ChronoUnit.DAYS);
 
         assertDoesNotThrow(() -> flightService.validateSearchParam(
-                FlightSearchCriteria.builder().departureAirport(departureAirport)
+                FlightSearchCriteriaDTO.builder().departureAirport(departureAirport)
                         .destinationAirport(destinationAirport)
-                        .departureTimeStart(departureTimeStart)
-                        .departureTimeEnd(departureTimeEnd)
-                        .arrivalTimeStart(arrivalTimeStart)
-                        .arrivalTimeEnd(arrivalTimeEnd)
+                        .outboundDate(outbound)
+                        .inboundDate(inbound)
                         .build()
         ));
     }
@@ -57,45 +62,72 @@ public class FlightServiceTest {
     @DisplayName("Should accept valid search parameters when arrival time is not given")
     void validateSearchParamWithoutArrivalTime() {
         String departureAirport = "JFK";
-        String destinationAirport = "LAX";
+        String destinationAirport = "BLR";
         Instant now = Instant.now();
-        Instant departureTimeStart = now.plusSeconds(86400);    // plus 1 day
-        Instant departureTimeEnd = now.plusSeconds(172800);     // plus 2 days
+        Instant outbound = now.plus(1, ChronoUnit.DAYS);
+        Instant inbound = now.plus(2, ChronoUnit.DAYS);
 
         assertDoesNotThrow(() -> flightService.validateSearchParam(
-                FlightSearchCriteria.builder().departureAirport(departureAirport)
+                FlightSearchCriteriaDTO.builder().departureAirport(departureAirport)
                         .destinationAirport(destinationAirport)
-                        .departureTimeStart(departureTimeStart)
-                        .departureTimeEnd(departureTimeEnd)
-                        .arrivalTimeStart(null)
-                        .arrivalTimeEnd(null)
+                        .outboundDate(outbound)
+                        .inboundDate(inbound)
                         .build()
         ));
     }
 
     @Test
-    @DisplayName("Should throw exception when arrival time is before departure time")
+    @DisplayName("Should throw exception when inbound time is before outbound time")
     void validateSearchParamArrivalBeforeDeparture_ThrowsException() {
-        // Given
         String departureAirport = "JFK";
-        String destinationAirport = "LAX";
+        String destinationAirport = "BLR";
         Instant now = Instant.now();
-        Instant departureTimeStart = now.plus(2, ChronoUnit.DAYS);
-        Instant departureTimeEnd = now.plus(3, ChronoUnit.DAYS);
-        Instant arrivalTimeStart = now.plus(1, ChronoUnit.DAYS);
-        Instant arrivalTimeEnd = now.plus(4, ChronoUnit.DAYS);
+        Instant inbound = now.plus(1, ChronoUnit.DAYS);
+        Instant outbound = now.plus(2, ChronoUnit.DAYS);
 
         FlightValidationException exception = assertThrows(
                 FlightValidationException.class,
                 () -> flightService.validateSearchParam(
-                        FlightSearchCriteria.builder().departureAirport(departureAirport)
+                        FlightSearchCriteriaDTO.builder().departureAirport(departureAirport)
                                 .destinationAirport(destinationAirport)
-                                .departureTimeStart(departureTimeStart)
-                                .departureTimeEnd(departureTimeEnd)
-                                .arrivalTimeStart(arrivalTimeStart)
-                                .arrivalTimeEnd(arrivalTimeEnd)
+                                .outboundDate(outbound)
+                                .inboundDate(inbound)
                                 .build()
                 ));
-        assertTrue(exception.getErrors().contains("Arrival time cannot be before departure time"));
+        assertTrue(exception.getErrors().contains("Inbound must be after Outbound time"));
+    }
+
+    @Test
+    @DisplayName("Should return flights for the given route")
+    void searchByRoute_Success() {
+
+        RouteSearchRequestDTO request = RouteSearchRequestDTO.builder()
+                .departureAirport("JFK")
+                .destinationAirport("BLR")
+                .build();
+
+        Flight flight = Flight.builder()
+                .departureAirport("JFK")
+                .destinationAirport("BLR")
+                .build();
+
+        FlightResponseDTO expectedDTO = FlightResponseDTO.builder()
+                .departureAirport("JFK")
+                .destinationAirport("BLR")
+                .build();
+
+        when(flightRepository.findByRoute("JFK", "BLR"))
+                .thenReturn(Arrays.asList(flight));
+
+        when(flightMapper.toDTO(flight))
+                .thenReturn(expectedDTO);
+
+        List<FlightResponseDTO> result = flightService.searchByRoute(request);
+        verify(flightRepository).findByRoute("JFK", "BLR");
+        verify(flightMapper).toDTO(flight);
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("JFK", result.getFirst().getDepartureAirport());
+        assertEquals("BLR", result.getFirst().getDestinationAirport());
     }
 }

@@ -3,7 +3,7 @@ package com.flight.data.mgmt.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flight.data.mgmt.dto.CrazySupplierFlightRequestDTO;
 import com.flight.data.mgmt.dto.CrazySupplierFlightResponseDTO;
-import com.flight.data.mgmt.dto.FlightSearchCriteria;
+import com.flight.data.mgmt.dto.FlightSearchCriteriaDTO;
 import com.flight.data.mgmt.mapper.CrazySupplierMapper;
 import com.flight.data.mgmt.model.Flight;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,21 +24,21 @@ public class CrazySupplierService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final CrazySupplierMapper mapper;
+    @Value("${crazy-supplier.api.url}")
     private String apiUrl;
 
     public CrazySupplierService(
             HttpClient httpClient,
             ObjectMapper objectMapper,
-            CrazySupplierMapper mapper,
-            @Value("${crazy-supplier.api.url}") String apiUrl) {
+            CrazySupplierMapper mapper) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.mapper = mapper;
         this.apiUrl = apiUrl;
     }
 
-    public List<Flight> searchFlights(FlightSearchCriteria flightSearchCriteria) {
-        CrazySupplierFlightRequestDTO request = mapper.toCrazySupplierRequestDTO(flightSearchCriteria);
+    public List<Flight> searchFlights(FlightSearchCriteriaDTO flightSearchCriteriaDTO) {
+        CrazySupplierFlightRequestDTO request = mapper.toCrazySupplierRequestDTO(flightSearchCriteriaDTO);
         try {
             return fetchFlightsFromExternalApi(request);
         } catch (IOException | InterruptedException e) {

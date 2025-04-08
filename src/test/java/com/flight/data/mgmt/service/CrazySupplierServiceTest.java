@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.flight.data.mgmt.dto.CrazySupplierFlightRequestDTO;
 import com.flight.data.mgmt.dto.CrazySupplierFlightResponseDTO;
-import com.flight.data.mgmt.dto.FlightSearchCriteria;
+import com.flight.data.mgmt.dto.FlightSearchCriteriaDTO;
 import com.flight.data.mgmt.mapper.CrazySupplierMapper;
 import com.flight.data.mgmt.model.Flight;
 import org.junit.jupiter.api.BeforeEach;
@@ -137,7 +137,7 @@ class CrazySupplierServiceTest {
         @DisplayName("Should successfully search flights using search criteria")
         void success() throws Exception {
 
-            FlightSearchCriteria searchCriteria = buildFlightSearchCriteria();
+            FlightSearchCriteriaDTO searchCriteria = buildFlightSearchCriteria();
             CrazySupplierFlightRequestDTO requestDTO = buildCrazySupplierFlightRequestDTO();
             CrazySupplierFlightResponseDTO responseDTO = buildCrazySupplierFlightResponseDTO();
             Flight expectedFlight = buildExpectedFlight();
@@ -163,7 +163,7 @@ class CrazySupplierServiceTest {
         @DisplayName("Should handle IOException during API call")
         void ioExceptionThrowsRuntimeException() throws Exception {
 
-            FlightSearchCriteria searchCriteria = buildFlightSearchCriteria();
+            FlightSearchCriteriaDTO searchCriteria = buildFlightSearchCriteria();
             CrazySupplierFlightRequestDTO requestDTO = buildCrazySupplierFlightRequestDTO();
 
             when(mapper.toCrazySupplierRequestDTO(searchCriteria)).thenReturn(requestDTO);
@@ -264,13 +264,13 @@ class CrazySupplierServiceTest {
     }
 
     // Helper methods for building test data
-    private FlightSearchCriteria buildFlightSearchCriteria() {
+    private FlightSearchCriteriaDTO buildFlightSearchCriteria() {
         Instant now = Instant.now();
-        return FlightSearchCriteria.builder()
+        return FlightSearchCriteriaDTO.builder()
                 .departureAirport("JFK")
                 .destinationAirport("LAX")
-                .departureTimeStart(now)
-                .departureTimeEnd(now.plus(1, ChronoUnit.DAYS))
+                .outboundDate(now)
+                .outboundDate(now.plus(1, ChronoUnit.DAYS))
                 .build();
     }
 

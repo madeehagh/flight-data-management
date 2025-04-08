@@ -9,21 +9,23 @@ import java.time.Instant;
 import java.util.List;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
+
+    // search flights by route
     @Query("SELECT f FROM Flight f WHERE " +
             "f.departureAirport = :departureAirport AND " +
-            "f.destinationAirport = :destinationAirport AND " +
-            "f.departureTime BETWEEN :departureTimeStart AND :departureTimeEnd AND " +
-            "(:airline IS NULL OR f.airLine = :airline) AND " +
-            "(:arrivalTimeStart IS NULL OR f.arrivalTime >= :arrivalTimeStart) AND " +
-            "(:arrivalTimeEnd IS NULL OR f.arrivalTime <= :arrivalTimeEnd)")
-    List<Flight> searchFlights(
+            "f.destinationAirport = :destinationAirport")
+    List<Flight> findByRoute(
             @Param("departureAirport") String departureAirport,
-            @Param("destinationAirport") String destinationAirport,
-            @Param("airline") String airline,
-            @Param("departureTimeStart") Instant departureTimeStart,
-            @Param("departureTimeEnd") Instant departureTimeEnd,
-            @Param("arrivalTimeStart") Instant arrivalTimeStart,
-            @Param("arrivalTimeEnd") Instant arrivalTimeEnd
+            @Param("destinationAirport") String destinationAirport
     );
 
+    // search flight and departure time range
+    @Query("SELECT f FROM Flight f WHERE " +
+            "f.airLine = :airline AND " +
+            "f.departureTime BETWEEN :startTime AND :endTime")
+    List<Flight> findByAirlineAndDepartureTime(
+            @Param("airline") String airline,
+            @Param("startTime") Instant startTime,
+            @Param("endTime") Instant endTime
+    );
 }

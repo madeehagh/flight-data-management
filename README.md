@@ -107,11 +107,21 @@ GET    /v1/api/flights/{id}     # Get flight details
 GET /v1/api/flights/search
 ```
 
-##### Consideration
+##### Assumpttions
 
 Users typically search for flights with at least origin and destination
 Dates are important for flight searches
 Airline might be optional for comparison shopping
+
+For now, I have taken below search patterns 
+1. Route search: departure airport,destination airport
+2. Airline with departure time
+
+When querying with 3rd party ie: crazy Supplier data, all 4 fields are required.
+1. from: 3-letter airline code
+2. to: 3-letter airline code
+3. outboundDate: ISO_LOCAL_DATE format – CET timezone
+4. inboundDate: ISO_LOCAL_DATE format – CET timezone
 
 **Make these parameters required:**
 

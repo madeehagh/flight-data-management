@@ -2,7 +2,7 @@ package com.flight.data.mgmt.mapper;
 
 import com.flight.data.mgmt.dto.CrazySupplierFlightRequestDTO;
 import com.flight.data.mgmt.dto.CrazySupplierFlightResponseDTO;
-import com.flight.data.mgmt.dto.FlightSearchCriteria;
+import com.flight.data.mgmt.dto.FlightSearchCriteriaDTO;
 import com.flight.data.mgmt.model.Flight;
 import org.springframework.stereotype.Component;
 
@@ -37,20 +37,19 @@ public class CrazySupplierMapper {
                 .toInstant();
     }
 
-    private Double calculateTotalFare(CrazySupplierFlightResponseDTO crazySupplierFlightResponseDTO) {
+    private double calculateTotalFare(CrazySupplierFlightResponseDTO crazySupplierFlightResponseDTO) {
         return crazySupplierFlightResponseDTO.getBasePrice() + crazySupplierFlightResponseDTO.getTax();
     }
 
-    public CrazySupplierFlightRequestDTO toCrazySupplierRequestDTO(FlightSearchCriteria flightSearchCriteria) {
-        if (flightSearchCriteria == null) {
+    public CrazySupplierFlightRequestDTO toCrazySupplierRequestDTO(FlightSearchCriteriaDTO flightSearchCriteriaDTO) {
+        if (flightSearchCriteriaDTO == null) {
             throw new IllegalArgumentException("Flight search criteria cannot be null");
         }
 
         return CrazySupplierFlightRequestDTO.builder()
-                .fromAirLine(flightSearchCriteria.getDepartureAirport())
-                .toAirLine(flightSearchCriteria.getDestinationAirport())
-                .inboundDateTime(flightSearchCriteria.getDepartureTimeStart())
-                .outboundDateTime(flightSearchCriteria.getDepartureTimeEnd())
+                .fromAirLine(flightSearchCriteriaDTO.getDepartureAirport())
+                .inboundDateTime(flightSearchCriteriaDTO.getOutboundDate())
+                .outboundDateTime(flightSearchCriteriaDTO.getInboundDate())
                 .build();
     }
 }

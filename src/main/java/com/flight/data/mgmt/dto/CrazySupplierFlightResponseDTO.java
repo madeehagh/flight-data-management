@@ -9,8 +9,8 @@ import java.time.Instant;
 @Builder
 public class CrazySupplierFlightResponseDTO {
     private String carrier;
-    private Double basePrice;
-    private Double tax;
+    private double basePrice;
+    private double tax;
     private String departureAirport;
     private String arrivalAirport;
     private Instant outboundDateTime;

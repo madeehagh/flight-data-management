@@ -11,7 +11,11 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 
 @Entity
-@Table(name = "flights")
+@Table(name = "flights", indexes = {
+        // Composite indexes for patterns route, airline and departure time
+        @Index(name = "idx_route", columnList = "departureAirport, destinationAirport"),
+        @Index(name = "idx_airline_departure", columnList = "airLine, departureTime")
+})
 @Data
 @Builder
 @NoArgsConstructor
@@ -28,7 +32,7 @@ public class Flight {
     private String supplier;
 
     @NotNull
-    private Double fare;
+    private double fare;
 
     @NotNull
     @Column(name = "departure_airport", length = 3)
