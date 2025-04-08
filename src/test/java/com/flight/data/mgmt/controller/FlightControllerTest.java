@@ -12,7 +12,6 @@ import java.time.temporal.ChronoUnit;
 
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(FlightController.class)
