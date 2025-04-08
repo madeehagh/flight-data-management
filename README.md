@@ -95,16 +95,16 @@ Airline might be optional for comparison shopping
 ### Manage Flights
 
 ```
-POST   /api/flights          # Create a new flight
-PUT    /api/flights/{id}     # Update a flight
-DELETE /api/flights/{id}     # Delete a flight
-GET    /api/flights/{id}     # Get flight details
+POST  /v1/api/flights          # Create a new flight
+PUT    /v1/api/flights/{id}     # Update a flight
+DELETE /v1/api/flights/{id}     # Delete a flight
+GET    /v1/api/flights/{id}     # Get flight details
 ```
 
 ### Search Flights
 
 ```
-GET /api/flights/search
+GET /v1/api/flights/search
 ```
 
 ##### Consideration
@@ -161,3 +161,9 @@ Run tests with:
 ```bash
 mvn test
 ```
+or Open swagger link once the application is up and running by executing
+  ```bash
+   mvn spring-boot:run
+   ```
+http://localhost:8080/swagger-ui/index.html#/flight-controller
+
