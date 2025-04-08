@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
@@ -28,4 +29,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             @Param("startTime") Instant startTime,
             @Param("endTime") Instant endTime
     );
+
+    @Query("SELECT f FROM Flight f WHERE f.flightNumber = :flightNumber")
+    Optional<Flight> findByFlightNumber(@Param("flightNumber") String flightNumber);
 }

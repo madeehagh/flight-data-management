@@ -1,5 +1,6 @@
 package com.flight.data.mgmt.controller;
 
+import com.flight.data.mgmt.dto.FlightResponseDTO;
 import com.flight.data.mgmt.dto.FlightSearchCriteriaDTO;
 import com.flight.data.mgmt.model.Flight;
 import com.flight.data.mgmt.service.FlightService;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,7 +28,7 @@ public class FlightControllerTest {
     Instant arrivalTime = now.plus(1, ChronoUnit.DAYS);
     @Test
     public void searchFlightSuccess() throws Exception {
-        Flight flight = Flight.builder()
+        FlightResponseDTO flight = FlightResponseDTO.builder()
                 .departureAirport(departureAirport)
                 .destinationAirport(destinationAirport)
                 .departureTime(now)
@@ -34,7 +36,7 @@ public class FlightControllerTest {
                 .build();
 
         when(flightService.searchFlights(any(FlightSearchCriteriaDTO.class)))
-                .thenReturn(asList(flight));
+                .thenReturn(Collections.singletonList(flight));
 
     }
 

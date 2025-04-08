@@ -1,9 +1,6 @@
 package com.flight.data.mgmt.controller;
 
-import com.flight.data.mgmt.dto.AirlineSearchRequestDTO;
-import com.flight.data.mgmt.dto.FlightResponseDTO;
-import com.flight.data.mgmt.dto.FlightSearchCriteriaDTO;
-import com.flight.data.mgmt.dto.RouteSearchRequestDTO;
+import com.flight.data.mgmt.dto.*;
 import com.flight.data.mgmt.model.Flight;
 import com.flight.data.mgmt.service.FlightService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,9 +21,9 @@ public class FlightController {
 
     @GetMapping("/search")
     @Operation(summary = "search flights", description = "returns list of flights")
-    public ResponseEntity<List<Flight>> search(@Valid FlightSearchCriteriaDTO searchCriteria) {
+    public ResponseEntity<List<FlightResponseDTO>> search(@Valid FlightSearchCriteriaDTO searchCriteria) {
 
-        List<Flight> flights = flightService.searchFlights(searchCriteria);
+        List<FlightResponseDTO> flights = flightService.searchFlights(searchCriteria);
 
         return ResponseEntity.ok(flights);
     }
@@ -47,20 +44,21 @@ public class FlightController {
 
 
     @PostMapping
-    public ResponseEntity<Flight> createFlight(@RequestBody @Valid Flight flight) {
-        Flight createdFlight = flightService.createFlight(flight);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdFlight);
+    @Operation(summary = "create Flight entity", description = "returns 201")
+    public ResponseEntity<Void> createFlight(@RequestBody @Valid FlightRequestDTO flight) {
+        flightService.createFlight(flight);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Flight> updateFlight(@PathVariable Long id, @RequestBody @Valid Flight flight) {
-        Flight updatedFlight = flightService.updateFlight(id, flight);
-        return ResponseEntity.ok(updatedFlight);
+    @PutMapping("/{flightNumber}")
+    public ResponseEntity<Void> updateFlight(@PathVariable String flightNumber, @RequestBody @Valid FlightRequestDTO flightRequestDTO) {
+        Flight updatedFlight = flightService.updateFlight(flightNumber, flightRequestDTO);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFlight(@PathVariable Long id) {
-        flightService.deleteFlight(id);
+    @DeleteMapping("/{flightNumber}")
+    public ResponseEntity<Void> deleteFlight(@PathVariable String flightNumber) {
+        flightService.deleteFlight(flightNumber);
         return ResponseEntity.noContent().build();
     }
 }

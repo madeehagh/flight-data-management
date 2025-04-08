@@ -10,11 +10,10 @@ public class ErrorMessages {
     public static final String INVALID_FARE = "Fare must be greater than 0";
     public static final String MISSING_AIRLINE = "Airline code is required";
     public static final String MISSING_SUPPLIER = "Supplier is required";
+    public static final String FLIGHT_VALIDATION_FAILED = "Flight validation failed";
 
     // Error Messages
     public static final String FLIGHT_NOT_FOUND = "Flight not found";
-    public static final String FLIGHT_NOT_FOUND_WITH_ID = "No flight found with id: %s";
-    public static final String FLIGHT_VALIDATION_FAILED = "Flight validation failed";
-    public static final String SEARCH_VALIDATION_FAILED = "Search parameter validation failed";
+    public static final String FLIGHT_NOT_FOUND_WITH_NUMBER= "No flight found with name: %s";
 
 }

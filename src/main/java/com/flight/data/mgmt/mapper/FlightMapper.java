@@ -1,12 +1,13 @@
 package com.flight.data.mgmt.mapper;
 
+import com.flight.data.mgmt.dto.FlightRequestDTO;
 import com.flight.data.mgmt.dto.FlightResponseDTO;
 import com.flight.data.mgmt.model.Flight;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FlightMapper {
-    public FlightResponseDTO toDTO(Flight flight) {
+    public FlightResponseDTO toFlightResponseDTO(Flight flight) {
         FlightResponseDTO dto = new FlightResponseDTO();
         dto.setFlightNumber(generateFlightNumber(flight));
         dto.setAirline(flight.getAirLine());
@@ -18,7 +19,6 @@ public class FlightMapper {
         dto.setArrivalTime(flight.getArrivalTime());
         return dto;
     }
-
     private String generateFlightNumber(Flight flight) {
         return String.format("%s-%s-%s-%s",
                 flight.getAirLine(),
@@ -26,4 +26,16 @@ public class FlightMapper {
                 flight.getDestinationAirport(),
                 flight.getDepartureTime().toString());
     }
+
+    public Flight toFlightDto(FlightRequestDTO flightRequestDTO){
+        return Flight.builder()
+                .airLine(flightRequestDTO.getAirline())
+                .destinationAirport(flightRequestDTO.getDestinationAirport())
+                .arrivalTime(flightRequestDTO.getArrivalTime())
+                .departureAirport(flightRequestDTO.getDepartureAirport())
+                .departureTime(flightRequestDTO.getDepartureTime())
+                .fare(flightRequestDTO.getFare())
+                .build();
+    }
+
 }

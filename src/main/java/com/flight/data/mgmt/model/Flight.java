@@ -25,6 +25,9 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "flight_number", unique = true)
+    private String flightNumber;
+
     @NotNull
     private String airLine;
 
