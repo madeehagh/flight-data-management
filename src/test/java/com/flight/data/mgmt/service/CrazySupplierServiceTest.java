@@ -76,7 +76,7 @@ class CrazySupplierServiceTest {
 
 
             mockSuccessfulApiCall(request, responseDTO, expectedFlight);
-            List<Flight> result = crazySupplierService.fetchFlightsFromApi(request);
+            List<Flight> result = crazySupplierService.fetchFlightsFromExternalApi(request);
 
 
             assertNotNull(result);
@@ -92,7 +92,7 @@ class CrazySupplierServiceTest {
 
         @Test
         @DisplayName("Should throw exception when API returns non-200 status")
-        void non200Status_ThrowsException() throws Exception {
+        void non200StatusThrowsException() throws Exception {
 
             CrazySupplierFlightRequestDTO request = buildCrazySupplierFlightRequestDTO();
 
@@ -100,7 +100,7 @@ class CrazySupplierServiceTest {
 
             RuntimeException exception = assertThrows(
                     RuntimeException.class,
-                    () -> crazySupplierService.fetchFlightsFromApi(request)
+                    () -> crazySupplierService.fetchFlightsFromExternalApi(request)
             );
 
             assertTrue(exception.getMessage().contains("API call failed with status: 500"));
@@ -113,11 +113,11 @@ class CrazySupplierServiceTest {
 
         @Test
         @DisplayName("Should handle empty response from API")
-        void emptyResponse_ReturnsEmptyList() throws Exception {
+        void emptyResponseReturnsEmptyList() throws Exception {
 
             CrazySupplierFlightRequestDTO request = buildCrazySupplierFlightRequestDTO();
             mockEmptyApiCall(request);
-            List<Flight> result = crazySupplierService.fetchFlightsFromApi(request);
+            List<Flight> result = crazySupplierService.fetchFlightsFromExternalApi(request);
 
             assertNotNull(result);
             assertTrue(result.isEmpty());
@@ -161,7 +161,7 @@ class CrazySupplierServiceTest {
 
         @Test
         @DisplayName("Should handle IOException during API call")
-        void ioException_ThrowsRuntimeException() throws Exception {
+        void ioExceptionThrowsRuntimeException() throws Exception {
 
             FlightSearchCriteria searchCriteria = buildFlightSearchCriteria();
             CrazySupplierFlightRequestDTO requestDTO = buildCrazySupplierFlightRequestDTO();

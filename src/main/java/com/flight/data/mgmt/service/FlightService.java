@@ -1,9 +1,11 @@
 package com.flight.data.mgmt.service;
 
 
+import com.flight.data.mgmt.dto.FlightSearchCriteria;
 import com.flight.data.mgmt.exception.FlightValidationException;
 import com.flight.data.mgmt.model.Flight;
 import com.flight.data.mgmt.repository.FlightRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -12,47 +14,43 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class FlightService {
-    private FlightRepository flightRepository;
+    private final FlightRepository flightRepository;
+    private final CrazySupplierService crazySupplierService;
 
-    public List<Flight> searchFlights(
-            String departureAirport,
-            String destinationAirport,
-            String airline,
-            Instant departureTimeStart,
-            Instant departureTimeEnd,
-            Instant arrivalTimeStart,
-            Instant arrivalTimeEnd) {
+    public List<Flight> searchFlights(FlightSearchCriteria flightSearchCriteria) {
 
-        validateSearchParam(departureAirport, destinationAirport, departureTimeStart, departureTimeEnd, arrivalTimeStart, arrivalTimeEnd);
+        validateSearchParam(flightSearchCriteria);
 
         List<Flight> localFlights = flightRepository.searchFlights(
-                departureAirport,
-                destinationAirport,
-                airline,
-                departureTimeStart,
-                departureTimeEnd,
-                arrivalTimeStart,
-                arrivalTimeEnd
+                flightSearchCriteria.getDepartureAirport(),
+                flightSearchCriteria.getDestinationAirport(),
+                flightSearchCriteria.getAirlineCode(),
+                flightSearchCriteria.getDepartureTimeStart(),
+                flightSearchCriteria.getDepartureTimeEnd(),
+                flightSearchCriteria.getArrivalTimeStart(),
+                flightSearchCriteria.getArrivalTimeEnd()
         );
 
-        List<Flight> crazySupplierFlights = new ArrayList<>();
+        List<Flight> crazySupplierFlights = crazySupplierService.searchFlights(flightSearchCriteria);
 
         List<Flight> allFlights = new ArrayList<>(localFlights);
         allFlights.addAll(crazySupplierFlights);
-
         allFlights.sort(Comparator.comparing(Flight::getDepartureTime));
 
         return allFlights;
     }
 
-    void validateSearchParam(String departureAirport,
-                             String destinationAirport,
-                             Instant departureTimeStart,
-                             Instant departureTimeEnd,
-                             Instant arrivalTimeStart,
-                             Instant arrivalTimeEnd) {
+    void validateSearchParam(FlightSearchCriteria searchCriteria) {
         {
+            String departureAirport = searchCriteria.getDepartureAirport();
+            String destinationAirport = searchCriteria.getDestinationAirport();
+            Instant departureTimeStart = searchCriteria.getDepartureTimeStart();
+            Instant departureTimeEnd = searchCriteria.getDepartureTimeEnd();
+            Instant arrivalTimeStart = searchCriteria.getArrivalTimeStart();
+            Instant arrivalTimeEnd = searchCriteria.getArrivalTimeEnd();
+
             List<String> errors = new ArrayList<>();
 
             if (isInvalidAirportCode(departureAirport)) {

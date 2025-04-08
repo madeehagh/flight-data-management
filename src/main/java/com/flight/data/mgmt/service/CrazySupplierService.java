@@ -40,13 +40,13 @@ public class CrazySupplierService {
     public List<Flight> searchFlights(FlightSearchCriteria flightSearchCriteria) {
         CrazySupplierFlightRequestDTO request = mapper.toCrazySupplierRequestDTO(flightSearchCriteria);
         try {
-            return fetchFlightsFromApi(request);
+            return fetchFlightsFromExternalApi(request);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected List<Flight> fetchFlightsFromApi(CrazySupplierFlightRequestDTO request) throws IOException, InterruptedException {
+    protected List<Flight> fetchFlightsFromExternalApi(CrazySupplierFlightRequestDTO request) throws IOException, InterruptedException {
 
         String requestBody = objectMapper.writeValueAsString(request);
 
