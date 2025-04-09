@@ -88,7 +88,7 @@ public class FlightService {
         log.info("Successfully saved flight with number: {}", flight.getFlightNumber());
     }
 
-    public Flight updateFlight(String flightNumber, FlightRequestDTO flightRequestDTO) {
+    public void updateFlight(String flightNumber, FlightRequestDTO flightRequestDTO) {
 
         Flight existingFlight = isExistingFlight(flightNumber);
         Flight updatedFlight = flightMapper.toFlightDto(flightRequestDTO);
@@ -96,7 +96,7 @@ public class FlightService {
         updatedFlight.setFlightNumber(existingFlight.getFlightNumber());
 
         validateFlight(updatedFlight);
-        return flightRepository.save(updatedFlight);
+        flightRepository.save(updatedFlight);
     }
 
     private Flight isExistingFlight(String flightNumber) {

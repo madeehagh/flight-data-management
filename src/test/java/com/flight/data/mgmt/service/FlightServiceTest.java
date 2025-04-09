@@ -136,7 +136,7 @@ public class FlightServiceTest {
     @Test
     @DisplayName("Should update flight successfully")
     void updateFlight_Success() {
-       
+
         String flightNumber = "AA123";
         FlightRequestDTO requestDTO = createValidFlightRequestDTO();
         Flight existingFlight = createExistingFlight(flightNumber);
@@ -150,7 +150,7 @@ public class FlightServiceTest {
                 .thenReturn(updatedFlight);
 
         flightService.updateFlight(flightNumber, requestDTO);
-       
+
         verify(flightRepository).findByFlightNumber(flightNumber);
         verify(flightMapper).toFlightDto(requestDTO);
         verify(flightRepository).save(updatedFlight);
@@ -159,7 +159,7 @@ public class FlightServiceTest {
     @Test
     @DisplayName("Should throw exception when updating non-existent flight")
     void updateFlight_NotFound() {
-       
+
         String flightNumber = "AA123";
         FlightRequestDTO requestDTO = createValidFlightRequestDTO();
 
@@ -176,7 +176,7 @@ public class FlightServiceTest {
     @Test
     @DisplayName("Should delete flight successfully")
     void deleteFlight_Success() {
-       
+
         String flightNumber = "AA123";
         Flight existingFlight = createExistingFlight(flightNumber);
         when(flightRepository.findByFlightNumber(flightNumber))

@@ -2,7 +2,6 @@ package com.flight.data.mgmt.controller;
 
 import com.flight.data.mgmt.dto.FlightResponseDTO;
 import com.flight.data.mgmt.dto.FlightSearchCriteriaDTO;
-import com.flight.data.mgmt.model.Flight;
 import com.flight.data.mgmt.service.FlightService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,7 +11,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 
-import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -26,6 +24,7 @@ public class FlightControllerTest {
     String departureAirport = "LAX";
     String destinationAirport = "BLR";
     Instant arrivalTime = now.plus(1, ChronoUnit.DAYS);
+
     @Test
     public void searchFlightSuccess() throws Exception {
         FlightResponseDTO flight = FlightResponseDTO.builder()

@@ -113,11 +113,13 @@ Users typically search for flights with at least origin and destination
 Dates are important for flight searches
 Airline might be optional for comparison shopping
 
-For now, I have taken below search patterns 
+For now, I have taken below search patterns
+
 1. Route search: departure airport,destination airport
 2. Airline with departure time
 
 When querying with 3rd party ie: crazy Supplier data, all 4 fields are required.
+
 1. from: 3-letter airline code
 2. to: 3-letter airline code
 3. outboundDate: ISO_LOCAL_DATE format – CET timezone
@@ -171,9 +173,12 @@ Run tests with:
 ```bash
 mvn test
 ```
+
 or Open swagger link once the application is up and running by executing
+
   ```bash
    mvn spring-boot:run
    ```
+
 http://localhost:8080/swagger-ui/index.html#/flight-controller
 

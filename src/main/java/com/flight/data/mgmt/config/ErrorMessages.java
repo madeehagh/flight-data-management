@@ -1,7 +1,9 @@
 package com.flight.data.mgmt.config;
 
 public class ErrorMessages {
-    private ErrorMessages() {}
+    private ErrorMessages() {
+    }
+
     // Validation Errors
     public static final String INVALID_DEPARTURE_AIRPORT = "Invalid departure airport code: %s";
     public static final String INVALID_DESTINATION_AIRPORT = "Invalid destination airport code: %s";
@@ -14,6 +16,6 @@ public class ErrorMessages {
 
     // Error Messages
     public static final String FLIGHT_NOT_FOUND = "Flight not found";
-    public static final String FLIGHT_NOT_FOUND_WITH_NUMBER= "No flight found with name: %s";
+    public static final String FLIGHT_NOT_FOUND_WITH_NUMBER = "No flight found with name: %s";
 
 }

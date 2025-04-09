@@ -34,7 +34,6 @@ public class CrazySupplierService {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.mapper = mapper;
-        this.apiUrl = apiUrl;
     }
 
     public List<Flight> searchFlights(FlightSearchCriteriaDTO flightSearchCriteriaDTO) {

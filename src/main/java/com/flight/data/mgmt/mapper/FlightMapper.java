@@ -19,6 +19,7 @@ public class FlightMapper {
         dto.setArrivalTime(flight.getArrivalTime());
         return dto;
     }
+
     private String generateFlightNumber(Flight flight) {
         return String.format("%s-%s-%s-%s",
                 flight.getAirLine(),
@@ -27,7 +28,7 @@ public class FlightMapper {
                 flight.getDepartureTime().toString());
     }
 
-    public Flight toFlightDto(FlightRequestDTO flightRequestDTO){
+    public Flight toFlightDto(FlightRequestDTO flightRequestDTO) {
         return Flight.builder()
                 .airLine(flightRequestDTO.getAirline())
                 .destinationAirport(flightRequestDTO.getDestinationAirport())
