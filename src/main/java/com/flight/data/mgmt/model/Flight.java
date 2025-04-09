@@ -14,7 +14,7 @@ import java.time.Instant;
 @Table(name = "flights", indexes = {
         // Composite indexes for patterns route, airline and departure time
         @Index(name = "idx_route", columnList = "departureAirport, destinationAirport"),
-        @Index(name = "idx_airline_departure", columnList = "airLine, departureTime")
+        @Index(name = "idx_airline_departure", columnList = "departureAirport, departureTime")
 })
 @Data
 @Builder

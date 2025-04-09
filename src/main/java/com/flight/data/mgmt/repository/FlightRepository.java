@@ -4,14 +4,15 @@ import com.flight.data.mgmt.model.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
-    // search flights by route
     @Query("SELECT f FROM Flight f WHERE " +
             "f.departureAirport = :departureAirport AND " +
             "f.destinationAirport = :destinationAirport")
@@ -20,14 +21,15 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             @Param("destinationAirport") String destinationAirport
     );
 
-    // search flight and departure time range
     @Query("SELECT f FROM Flight f WHERE " +
             "f.departureAirport = :departureAirport AND " +
-            "f.departureTime BETWEEN :startTime AND :endTime")
+            "(:destinationTime IS NULL OR " +
+            "   (f.departureTime >= :departureTime AND f.departureTime <= :destinationTime)" +
+            ")")
     List<Flight> findByDepartureAndDestination(
             @Param("departureAirport") String departureAirport,
-            @Param("startTime") Instant startTime,
-            @Param("endTime") Instant endTime
+            @Param("departureTime") Instant departureTime,
+            @Param("destinationTime") Instant destinationTime
     );
 
     @Query("SELECT f FROM Flight f WHERE f.flightNumber = :flightNumber")

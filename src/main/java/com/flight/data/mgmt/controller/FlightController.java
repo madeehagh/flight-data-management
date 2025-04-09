@@ -39,7 +39,7 @@ public class FlightController {
     @GetMapping(value = "/departure-airport", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "search flights by airline, outbound and inbound time", description = "returns list of flights")
     public ResponseEntity<List<FlightResponseDTO>> searchByDepartureAndDestination(
-            @RequestParam String departureAirport, @RequestParam Instant departureTime, @RequestParam Instant destinationTime) {
+            @RequestParam String departureAirport, @RequestParam Instant departureTime, @RequestParam(required = false) Instant destinationTime) {
         return ResponseEntity.ok(flightService.searchByDepartureAndDestination(departureAirport, departureTime, destinationTime));
     }
 
