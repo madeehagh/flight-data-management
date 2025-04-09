@@ -24,7 +24,8 @@ A Spring Boot application for managing and searching flight data from multiple s
 - A user can request to get flight info for source to destination
 - API call /search-airline returns aggregated value from local and external API call
 - Used H2 for in-memory storage for local data 
-- Composite Indexing done based on search criteria 
+- Composite Indexing done based on search criteria
+- Assumed timeout for third-party response as 10 sec
 
 ## Technical Stack
 
