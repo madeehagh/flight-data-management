@@ -17,14 +17,14 @@ A Spring Boot application for managing and searching flight data from multiple s
 - Store flight data locally
 - Real-time integration with CrazySupplier API
 
-##### Assumptions
+### Assumptions
 
-All time fields are in UTC
-A user can at least search by departure-airport and departure time or arrival time.
-A user can request to get flight info for source to destination
-API call /search-airline returns aggregated value from local and external API call
-Used H2 for in-memory storage for local data 
-Composite Indexing done based on search criteria 
+- All time fields are in UTC
+- A user can at least search by departure-airport and departure time or arrival time.
+- A user can request to get flight info for source to destination
+- API call /search-airline returns aggregated value from local and external API call
+- Used H2 for in-memory storage for local data 
+- Composite Indexing done based on search criteria 
 
 ## Technical Stack
 
@@ -37,6 +37,7 @@ Composite Indexing done based on search criteria
 ## API Endpoints
 
 ### Flight Management
+These APIs won't call the external API 
 ```http
 POST   /v1/api/flights                # Create flight
 PUT    /v1/api/flights/{flightNumber} # Update flight
@@ -47,6 +48,7 @@ GET /v1/api/flights/departure-airport  # Search flights by departure-airport
 ```
 
 ### Flight Search
+This API will call the external API and return aggrregate data from local and external API result
 ```http
 GET /v1/api/flights/search-airline            # Search flights
 ```
