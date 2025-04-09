@@ -26,7 +26,7 @@ public class FlightControllerTest {
     Instant arrivalTime = now.plus(1, ChronoUnit.DAYS);
 
     @Test
-    public void searchFlightSuccess() throws Exception {
+    public void searchFlightSuccess() {
         FlightResponseDTO flight = FlightResponseDTO.builder()
                 .departureAirport(departureAirport)
                 .destinationAirport(destinationAirport)

@@ -134,7 +134,7 @@ class CrazySupplierServiceTest {
     class SearchFlightsTests {
 
         @Test
-        @DisplayName("Should successfully search flights using search criteria")
+        @DisplayName("Should successfully search flights when API call iis successful")
         void success() throws Exception {
 
             FlightSearchCriteriaDTO searchCriteria = buildFlightSearchCriteria();
@@ -160,8 +160,8 @@ class CrazySupplierServiceTest {
         }
 
         @Test
-        @DisplayName("Should handle IOException during API call")
-        void ioExceptionThrowsRuntimeException() throws Exception {
+        @DisplayName("Should return empty list when external API call fails")
+        void searchFlightsWhenExternalException() throws Exception {
 
             FlightSearchCriteriaDTO searchCriteria = buildFlightSearchCriteria();
             CrazySupplierFlightRequestDTO requestDTO = buildCrazySupplierFlightRequestDTO();
@@ -171,13 +171,9 @@ class CrazySupplierServiceTest {
             when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                     .thenThrow(new IOException("Network error"));
 
-            RuntimeException exception = assertThrows(
-                    RuntimeException.class,
-                    () -> crazySupplierService.searchFlights(searchCriteria)
-            );
-
-            assertInstanceOf(IOException.class, exception.getCause());
-            assertEquals("Network error", exception.getCause().getMessage());
+            List<Flight> result = crazySupplierService.searchFlights(searchCriteria);
+            assertNotNull(result);
+            assertTrue(result.isEmpty(), "Expected an empty list when an IOException occurs");
 
             verify(mapper).toCrazySupplierRequestDTO(searchCriteria);
             verify(objectMapper).writeValueAsString(requestDTO);

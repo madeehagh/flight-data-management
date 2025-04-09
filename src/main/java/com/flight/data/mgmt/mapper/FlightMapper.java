@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class FlightMapper {
     public FlightResponseDTO toFlightResponseDTO(Flight flight) {
         FlightResponseDTO dto = new FlightResponseDTO();
-        dto.setFlightNumber(generateFlightNumber(flight));
+        dto.setFlightNumber(flight.getFlightNumber());
         dto.setAirline(flight.getAirLine());
         dto.setSupplier(flight.getSupplier());
         dto.setFare(flight.getFare());
@@ -20,17 +20,10 @@ public class FlightMapper {
         return dto;
     }
 
-    private String generateFlightNumber(Flight flight) {
-        return String.format("%s-%s-%s-%s",
-                flight.getAirLine(),
-                flight.getDepartureAirport(),
-                flight.getDestinationAirport(),
-                flight.getDepartureTime().toString());
-    }
-
     public Flight toFlightDto(FlightRequestDTO flightRequestDTO) {
         return Flight.builder()
                 .airLine(flightRequestDTO.getAirline())
+                .supplier(flightRequestDTO.getSupplier())
                 .destinationAirport(flightRequestDTO.getDestinationAirport())
                 .arrivalTime(flightRequestDTO.getArrivalTime())
                 .departureAirport(flightRequestDTO.getDepartureAirport())

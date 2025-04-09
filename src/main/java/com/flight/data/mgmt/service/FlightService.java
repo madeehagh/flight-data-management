@@ -7,6 +7,7 @@ import com.flight.data.mgmt.exception.FlightValidationException;
 import com.flight.data.mgmt.mapper.FlightMapper;
 import com.flight.data.mgmt.model.Flight;
 import com.flight.data.mgmt.repository.FlightRepository;
+import com.flight.data.mgmt.util.FlightNumberGenerator;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,31 +48,33 @@ public class FlightService {
     }
 
 
-    public List<FlightResponseDTO> searchByRoute(RouteSearchRequestDTO routeSearchRequestDTO) {
+    public List<FlightResponseDTO> searchByRoute(String departureAirport, String destinationAirport) {
 
         List<Flight> flights = flightRepository.findByRoute(
-                routeSearchRequestDTO.getDepartureAirport(),
-                routeSearchRequestDTO.getDestinationAirport()
+                departureAirport,
+                destinationAirport
         );
 
         if (flights.isEmpty()) {
-            log.warn("No flights found for route {}", routeSearchRequestDTO.getDepartureAirport());
+            log.warn("No flights found for route from {} to {}", departureAirport, destinationAirport);
         }
         return flights.stream()
                 .map(flightMapper::toFlightResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<FlightResponseDTO> searchByAirlineAndTime(AirlineSearchRequestDTO request) {
+    public List<FlightResponseDTO> searchByDepartureAndDestination(String departureAirport,
+                                                                   Instant departureTime,
+                                                                   Instant destinationTime) {
 
-        List<Flight> flights = flightRepository.findByAirlineAndDepartureTime(
-                request.getAirline(),
-                request.getStartTime(),
-                request.getEndTime()
+        List<Flight> flights = flightRepository.findByDepartureAndDestination(
+                departureAirport,
+                departureTime,
+                destinationTime
         );
 
         if (flights.isEmpty()) {
-            log.warn("No flights found for Airline {}", request.getAirline());
+            log.warn("No flights found for Origin {}", departureAirport);
         }
 
         return flights.stream()
@@ -79,13 +82,22 @@ public class FlightService {
                 .collect(Collectors.toList());
     }
 
-    public void createFlight(FlightRequestDTO flightRequestDTO) {
+    public FlightResponseDTO createFlight(FlightRequestDTO flightRequestDTO) {
         log.debug("Received request to create flight: {}", flightRequestDTO);
         Flight flight = flightMapper.toFlightDto(flightRequestDTO);
         validateFlight(flight);
-        log.info("Saving new flight with number: {}", flight.getFlightNumber());
+
+        String flightNumber = FlightNumberGenerator.generateFlightNumber(flight.getAirLine());
+        while (flightRepository.findByFlightNumber(flightNumber).isPresent()) {
+            flightNumber = FlightNumberGenerator.generateFlightNumber(flight.getAirLine());
+        }
+
+        flight.setFlightNumber(flightNumber);
         flightRepository.save(flight);
+
         log.info("Successfully saved flight with number: {}", flight.getFlightNumber());
+
+        return flightMapper.toFlightResponseDTO(flight);
     }
 
     public void updateFlight(String flightNumber, FlightRequestDTO flightRequestDTO) {

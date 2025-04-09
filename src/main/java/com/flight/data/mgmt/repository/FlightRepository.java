@@ -22,10 +22,10 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     // search flight and departure time range
     @Query("SELECT f FROM Flight f WHERE " +
-            "f.airLine = :airline AND " +
+            "f.departureAirport = :departureAirport AND " +
             "f.departureTime BETWEEN :startTime AND :endTime")
-    List<Flight> findByAirlineAndDepartureTime(
-            @Param("airline") String airline,
+    List<Flight> findByDepartureAndDestination(
+            @Param("departureAirport") String departureAirport,
             @Param("startTime") Instant startTime,
             @Param("endTime") Instant endTime
     );

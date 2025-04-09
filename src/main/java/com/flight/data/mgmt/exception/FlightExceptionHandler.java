@@ -26,6 +26,9 @@ public class FlightExceptionHandler {
                 "Validation Error",
                 e.getErrors()
         );
+
+        log.error(e.getMessage(), e);
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(error);
@@ -34,6 +37,9 @@ public class FlightExceptionHandler {
     @ExceptionHandler({UnresolvedAddressException.class, IOException.class})
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseEntity<ErrorResponseDTO> handleNetworkException(Exception e) {
+
+        log.error(e.getMessage(), e);
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 "Service Temporarily Unavailable",
                 Collections.singletonList("Unable to connect to flight supplier service. Please try again later.")

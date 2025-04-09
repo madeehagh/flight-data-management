@@ -4,7 +4,6 @@ import com.flight.data.mgmt.config.ErrorMessages;
 import com.flight.data.mgmt.dto.FlightRequestDTO;
 import com.flight.data.mgmt.dto.FlightResponseDTO;
 import com.flight.data.mgmt.dto.FlightSearchCriteriaDTO;
-import com.flight.data.mgmt.dto.RouteSearchRequestDTO;
 import com.flight.data.mgmt.exception.FlightValidationException;
 import com.flight.data.mgmt.mapper.FlightMapper;
 import com.flight.data.mgmt.model.Flight;
@@ -41,12 +40,13 @@ public class FlightServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
+    
+    private final String departureAirport = "LAX";
+    private final String destinationAirport = "BLR";
+    
     @Test
     @DisplayName("Should accept valid search parameters without throwing exception")
     void validateSearchParamValidParameters() {
-        String departureAirport = "JFK";
-        String destinationAirport = "BLR";
         Instant now = Instant.now();
         Instant outbound = now.plus(1, ChronoUnit.DAYS);
         Instant inbound = now.plus(2, ChronoUnit.DAYS);
@@ -63,8 +63,6 @@ public class FlightServiceTest {
     @Test
     @DisplayName("Should accept valid search parameters when arrival time is not given")
     void validateSearchParamWithoutArrivalTime() {
-        String departureAirport = "JFK";
-        String destinationAirport = "BLR";
         Instant now = Instant.now();
         Instant outbound = now.plus(1, ChronoUnit.DAYS);
         Instant inbound = now.plus(2, ChronoUnit.DAYS);
@@ -81,8 +79,6 @@ public class FlightServiceTest {
     @Test
     @DisplayName("Should throw exception when inbound time is before outbound time")
     void validateSearchParamArrivalBeforeDeparture_ThrowsException() {
-        String departureAirport = "JFK";
-        String destinationAirport = "BLR";
         Instant now = Instant.now();
         Instant inbound = now.plus(1, ChronoUnit.DAYS);
         Instant outbound = now.plus(2, ChronoUnit.DAYS);
@@ -102,35 +98,29 @@ public class FlightServiceTest {
     @Test
     @DisplayName("Should return flights for the given route")
     void searchByRoute_Success() {
-
-        RouteSearchRequestDTO request = RouteSearchRequestDTO.builder()
-                .departureAirport("JFK")
-                .destinationAirport("BLR")
-                .build();
-
         Flight flight = Flight.builder()
-                .departureAirport("JFK")
-                .destinationAirport("BLR")
+                .departureAirport(departureAirport)
+                .destinationAirport(destinationAirport)
                 .build();
 
         FlightResponseDTO expectedDTO = FlightResponseDTO.builder()
-                .departureAirport("JFK")
-                .destinationAirport("BLR")
+                .departureAirport(departureAirport)
+                .destinationAirport(destinationAirport)
                 .build();
 
-        when(flightRepository.findByRoute("JFK", "BLR"))
+        when(flightRepository.findByRoute(departureAirport, destinationAirport))
                 .thenReturn(Arrays.asList(flight));
 
         when(flightMapper.toFlightResponseDTO(flight))
                 .thenReturn(expectedDTO);
 
-        List<FlightResponseDTO> result = flightService.searchByRoute(request);
-        verify(flightRepository).findByRoute("JFK", "BLR");
+        List<FlightResponseDTO> result = flightService.searchByRoute(departureAirport, destinationAirport);
+        verify(flightRepository).findByRoute(departureAirport, destinationAirport);
         verify(flightMapper).toFlightResponseDTO(flight);
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("JFK", result.getFirst().getDepartureAirport());
-        assertEquals("BLR", result.getFirst().getDestinationAirport());
+        assertEquals(departureAirport, result.getFirst().getDepartureAirport());
+        assertEquals(destinationAirport, result.getFirst().getDestinationAirport());
     }
 
     @Test
@@ -207,8 +197,8 @@ public class FlightServiceTest {
                 .airline("AA")
                 .supplier("LocalDB")
                 .fare(299.99)
-                .departureAirport("JFK")
-                .destinationAirport("LAX")
+                .departureAirport(departureAirport)
+                .destinationAirport(destinationAirport)
                 .departureTime(Instant.now().plus(1, ChronoUnit.DAYS))
                 .arrivalTime(Instant.now().plus(2, ChronoUnit.DAYS))
                 .build();
@@ -221,8 +211,8 @@ public class FlightServiceTest {
                 .airLine("UA")
                 .supplier("LocalDB")
                 .fare(199.99)
-                .departureAirport("SFO")
-                .destinationAirport("ORD")
+                .departureAirport(departureAirport)
+                .destinationAirport(destinationAirport)
                 .departureTime(Instant.now())
                 .arrivalTime(Instant.now().plus(1, ChronoUnit.DAYS))
                 .build();
@@ -235,8 +225,8 @@ public class FlightServiceTest {
                 .airLine("AA")
                 .supplier("LocalDB")
                 .fare(299.99)
-                .departureAirport("JFK")
-                .destinationAirport("LAX")
+                .departureAirport(departureAirport)
+                .destinationAirport(destinationAirport)
                 .departureTime(Instant.now().plus(1, ChronoUnit.DAYS))
                 .arrivalTime(Instant.now().plus(2, ChronoUnit.DAYS))
                 .build();

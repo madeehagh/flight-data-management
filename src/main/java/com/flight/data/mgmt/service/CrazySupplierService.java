@@ -6,6 +6,8 @@ import com.flight.data.mgmt.dto.CrazySupplierFlightResponseDTO;
 import com.flight.data.mgmt.dto.FlightSearchCriteriaDTO;
 import com.flight.data.mgmt.mapper.CrazySupplierMapper;
 import com.flight.data.mgmt.model.Flight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,12 +39,15 @@ public class CrazySupplierService {
         this.mapper = mapper;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(CrazySupplierService.class);
+
     public List<Flight> searchFlights(FlightSearchCriteriaDTO flightSearchCriteriaDTO) {
         CrazySupplierFlightRequestDTO request = mapper.toCrazySupplierRequestDTO(flightSearchCriteriaDTO);
         try {
             return fetchFlightsFromExternalApi(request);
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            return new ArrayList<>();
         }
     }
 
