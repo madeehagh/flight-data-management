@@ -116,6 +116,8 @@ Application runs at: `http://localhost:8080`
 ```bash
 mvn test
 ```
+Or run the application and use swagger to test the APIs  http://localhost:8080/swagger-ui/index.html#/flight-controller/
+
 
 ### API Documentation
 Access Swagger UI after starting the application:
